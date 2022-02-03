@@ -1,4 +1,5 @@
 
+var tasks = [];
 var taskIdCounter = 0;
 var formEl = document.querySelector("#task-form");
 var tasksToDoEl = document.querySelector("#tasks-to-do");
@@ -31,7 +32,8 @@ var taskFormHandler = function() {
         // use an object to store data pieces
         var taskDataObj = {
             name: taskNameInput,
-            type: taskTypeInput
+            type: taskTypeInput,
+            status: "to do"
         };
         // send the data entered to the createTaskEl function
         createTaskEl(taskDataObj);
@@ -59,8 +61,13 @@ var createTaskEl = function(taskDataObj) {
     var taskActionsEl = createTaskActions(taskIdCounter);
     listItemEl.appendChild(taskActionsEl);
 
+
     // append task items to the new task
     tasksToDoEl.appendChild(listItemEl);
+
+    // adds tasks 'data-task-id' to the taskDataObj object
+    taskDataObj.id = taskIdCounter;
+    tasks.push(taskDataObj);
 
     // increase task counter for next unique ID
     taskIdCounter++;
@@ -150,6 +157,13 @@ var completeEditTask = function(taskName, taskType, taskId) {
     taskSelected.querySelector("h3.task-name").textContent = taskName;
     taskSelected.querySelector("span.task-type").textContent = taskType;
 
+    // loop through tasks array and task object with new content
+    for (var i = 0; i < tasks.length; i++) {
+        if (tasks[i].id === parseInt(taskId)) {
+            tasks[i].name = taskName;
+            tasks[i].type = taskType;
+        }
+    }
     alert("Task Updated!");
 
     // reset the form and remove the 'data-task-id'
@@ -176,7 +190,14 @@ var taskStatusChangeHandler = function(event) {
     else if (statusValue === "completed") {
         tasksCompletedEl.appendChild(taskSelected);
     }
+     // update task's in tasks array
+     for (var i = 0; i < tasks.length; i++) {
+         if (tasks[i].id === parseInt(taskId)) {
+             tasks[i].status = statusValue;
+         }
+     }
 };
+     
 
 formEl.addEventListener("submit", taskFormHandler);
 pageContentEl.addEventListener("click", taskButtonHandler);
