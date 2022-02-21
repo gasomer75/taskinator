@@ -238,11 +238,11 @@ var saveTasks = function() {
 };
 
 var loadTasks = function() {
+    // get tasks from localStorage
     var savedTasks = localStorage.getItem("tasks");
 
     // check if there are any tasks or if the value is NULL
     if (!savedTasks) {
-        //tasks = [];
         return false;
     }
     savedTasks = JSON.parse(savedTasks);
